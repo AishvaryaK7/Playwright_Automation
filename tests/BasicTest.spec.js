@@ -66,4 +66,7 @@ test.only("frameHandle",async({page})=>
     
         const framePage = page.frameLocator("#courses-iframe");
         await framePage.locator("li a[href*='lifetime-access']:visible").click();
+
+        console.log("Git");
+        
     });
