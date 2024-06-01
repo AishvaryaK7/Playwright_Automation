@@ -15,25 +15,6 @@ test('pagelaunch',async ({page})=>
     await expect(page).toHaveTitle("The Internet");
 });
 
-test('locatorsValidation', async({page})=>
-{
-    await page.goto("https://the-internet.herokuapp.com/");
-    await expect(page).toHaveTitle("The Internet");
-    console.log(await page.title());
-
-    await page.locator("[href*='checkboxes']").click();
-    //await page.getByText('Checkboxes').click();
-
-    await page.getByRole('checkbox').first().check();
-    await page.getByRole('checkbox').last().uncheck();
-
-    console.log(await page.getByRole('checkbox').last().isChecked());
-    expect(await page.getByRole('checkbox').last().isChecked()).toBeFalsy();
-
-    //await page.pause();
-
-});
-
 test("hiddenElements",async({page})=>
 {
     await page.goto("https://the-internet.herokuapp.com/");
@@ -60,13 +41,31 @@ test("dialogHandle",async({page})=>
 
 });
 
-test.only("frameHandle",async({page})=>
-    {
+test("frameHandle",async({page})=>
+{
         await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
     
         const framePage = page.frameLocator("#courses-iframe");
         await framePage.locator("li a[href*='lifetime-access']:visible").click();
 
         console.log("Git");
-        
-    });
+
+});
+
+test.only("nested iFrames",async({page})=>
+{
+    await page.goto("https://the-internet.herokuapp.com/nested_frames");
+
+    const mainFrame = page.frameLocator('[name="frame-top"]');
+    
+    const leftFrame = await mainFrame.frameLocator('[name="frame-left"]').locator('body').textContent();
+    console.log(leftFrame);
+
+    const middleFrame = await mainFrame.frameLocator('[name="frame-middle"]').locator('body').textContent();
+    console.log(middleFrame);
+
+    const rightFrame =  await mainFrame.frameLocator('[name="frame-right"]').locator('body').textContent();
+    console.log(rightFrame);
+
+    await page.waitForTimeout(5000);
+});
